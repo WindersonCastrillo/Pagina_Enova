@@ -1,0 +1,11 @@
+{
+    "name": "Evalora | Selección de talento sin sesgos",
+    "short_name": "Evalora",
+    "start_url": "./Index.html",
+    "display": "standalone",
+    "background_color": "#08111c",
+    "theme_color": "#0d1b2a",
+    "icons": [
+        { "src": "favicon_evalora.png", "sizes": "512x512", "type": "image/png" }
+    ]
+}

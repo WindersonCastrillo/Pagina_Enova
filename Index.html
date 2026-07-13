@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html lang="es-CL" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- ==========================================================
+         SEO on-page
+         ========================================================== -->
+    <title>Evalora | Selección de talento sin sesgos</title>
+    <meta name="description" content="Evalora conecta empresas con profesionales de 60 a 65 años y más a través de microproyectos remunerados que demuestran capacidad real y vigente, reduciendo el sesgo etario en la contratación.">
+    <meta name="keywords" content="talento senior, empleo adultos mayores, inserción laboral, evaluación por competencias, sesgo etario, Chile">
+    <meta name="robots" content="index, follow">
+    <meta name="author" content="Evalora SpA">
+    <meta name="theme-color" content="#0d1b2a">
+
+    <!-- Open Graph (compartir en redes sociales) -->
+    <meta property="og:type" content="website">
+    <meta property="og:locale" content="es_CL">
+    <meta property="og:title" content="Evalora | Selección de talento sin sesgos">
+    <meta property="og:description" content="Conectamos empresas con talento senior (60-65 años) a través de microproyectos remunerados que demuestran capacidad real.">
+    <!-- TODO antes de producción: agregar og:url y og:image con el dominio y la imagen social definitivos -->
+
+    <!-- Favicon / icono de pestaña y barra de tareas (isotipo oficial de la marca) -->
+    <link rel="icon" type="image/png" sizes="512x512" href="favicon_evalora.png">
+    <link rel="apple-touch-icon" href="favicon_evalora.png">
+    <link rel="manifest" href="manifest.json">
+
+    <!-- Preconexión a Google Fonts: reduce la latencia de la primera carga de tipografía -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <!-- Tailwind CSS (Play CDN). Se mantiene en <head> a propósito para evitar un flash de contenido sin estilos. -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Fallback accesible y reutilizable para el logotipo, en caso de que logo_evalora.png no cargue -->
+    <script>
+        function handleLogoError(imgEl, variant) {
+            var markup = {
+                wordmark: '<div class="text-xl font-bold text-[#0d1b2a] tracking-tight flex items-center gap-2"><div class="w-8 h-8 rounded-full border-2 border-[#119e97] flex items-center justify-center text-[#119e97]" aria-hidden="true">e</div>evalora</div>',
+                check: '<svg class="w-3 h-3 text-[#119e97]" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg>'
+            };
+            var wrapper = document.createElement('span');
+            wrapper.setAttribute('role', 'img');
+            wrapper.setAttribute('aria-label', 'Evalora');
+            wrapper.innerHTML = markup[variant] || markup.wordmark;
+            imgEl.replaceWith(wrapper.firstElementChild);
+        }
+    </script>
+
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500;1,600&family=Inter:wght@300;400;500;600&display=swap');
+
+        .font-serif { font-family: 'Playfair Display', serif; }
+        .font-sans { font-family: 'Inter', sans-serif; }
+
+        .bg-evalora-dark { background-color: #0d1b2a; }
+        .text-evalora-teal { color: #119e97; }
+
+        .anim-reveal { opacity: 0; transform: translateY(30px); }
+        .fade-up { opacity: 0; transform: translateY(24px); }
+        .fade-left { opacity: 0; transform: translate3d(-50px, 0, 0); }
+        .fade-right { opacity: 0; transform: translate3d(50px, 0, 0); }
+
+        /* Foco de teclado visible y consistente en toda la página (clave para el público senior) */
+        a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visible, select:focus-visible {
+            outline: 2px solid #119e97;
+            outline-offset: 3px;
+            border-radius: 4px;
+        }
+
+        /* =========================================
+           EFECTO AURORA GLOW
+           ========================================= */
+        .aurora-container {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            overflow: hidden; z-index: 0; background-color: #08111c;
+            contain: layout paint; /* aísla el repintado del fondo animado del resto del documento */
+        }
+
+        .noise-overlay {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.04'/%3E%3C/svg%3E");
+            z-index: 2; pointer-events: none;
+        }
+
+        .orb {
+            position: absolute; border-radius: 50%; filter: blur(60px);
+            opacity: 0.85; mix-blend-mode: screen; animation: float-orb infinite ease-in-out alternate;
+            will-change: transform; /* promueve la capa a la GPU en vez de recalcular en CPU */
+            backface-visibility: hidden;
+        }
+
+        .orb-1 { width: 55vw; height: 55vw; background: radial-gradient(circle, rgba(17,158,151,0.95) 0%, rgba(17,158,151,0) 75%); top: -15%; left: -20%; animation-duration: 14s; }
+        .orb-2 { width: 65vw; height: 65vw; background: radial-gradient(circle, rgba(28,94,204,0.85) 0%, rgba(28,94,204,0) 75%); bottom: -25%; right: -20%; animation-duration: 20s; animation-delay: -5s; }
+        .orb-3 { width: 45vw; height: 45vw; background: radial-gradient(circle, rgba(20,200,160,0.8) 0%, rgba(20,200,160,0) 70%); top: 30%; left: 30%; animation-duration: 17s; animation-delay: -2s; }
+        .orb-4 { width: 40vw; height: 40vw; background: radial-gradient(circle, rgba(0,255,255,0.4) 0%, rgba(0,255,255,0) 70%); bottom: 10%; left: 10%; animation-duration: 15s; animation-delay: -7s; }
+
+        @keyframes float-orb {
+            0% { transform: translate3d(0, 0, 0) scale(1); }
+            33% { transform: translate3d(8%, 8%, 0) scale(1.1); }
+            66% { transform: translate3d(-5%, 12%, 0) scale(0.9); }
+            100% { transform: translate3d(0, 0, 0) scale(1); }
+        }
+
+        /* Móviles: se reduce el costo de renderizado del blur y se retira un orbe para evitar jank */
+        @media (max-width: 768px) {
+            .orb { filter: blur(40px); }
+            .orb-4 { display: none; }
+        }
+
+        /* Respeta la preferencia del usuario por menos movimiento */
+        @media (prefers-reduced-motion: reduce) {
+            .orb { animation: none; }
+            html { scroll-behavior: auto; }
+        }
+
+        .glass-panel { background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.1); }
+        .check-icon { flex-shrink: 0; width: 1.2rem; height: 1.2rem; color: #119e97; margin-top: 0.2rem; margin-right: 0.75rem; }
+    </style>
+
+    <!-- Si JavaScript está deshabilitado, el contenido animado por GSAP debe seguir siendo visible -->
+    <noscript>
+        <style>.anim-reveal, .fade-up, .fade-left, .fade-right { opacity: 1 !important; transform: none !important; }</style>
+    </noscript>
+</head>
+<body class="font-sans bg-gray-50 antialiased overflow-x-hidden text-gray-700">
+
+    <!-- Enlace de salto para usuarios de teclado y lectores de pantalla -->
+    <a href="#main-content" class="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[100] focus:bg-white focus:text-[#0d1b2a] focus:px-4 focus:py-2 focus:rounded-lg focus:shadow-lg focus:font-semibold">Saltar al contenido principal</a>
+
+    <!-- Navbar -->
+    <nav class="fixed w-full z-50 transition-all duration-300 bg-white/90 backdrop-blur-md border-b border-gray-100 shadow-sm" aria-label="Navegación principal">
+        <div class="container mx-auto px-6 py-4 flex justify-between items-center max-w-6xl">
+            <div class="flex items-center gap-3">
+                <div class="bg-white/90 p-1 rounded-lg backdrop-blur-sm shadow-sm">
+                    <img
+                        src="logo_evalora.png"
+                        alt="Evalora — Plataforma de evaluación de talento senior"
+                        width="120"
+                        height="32"
+                        loading="eager"
+                        decoding="async"
+                        class="h-8 w-auto object-contain"
+                        onerror="handleLogoError(this, 'wordmark')"
+                    >
+                </div>
+            </div>
+            <div class="hidden md:flex space-x-8 items-center text-xs font-medium uppercase tracking-wider text-gray-500">
+                <a href="#el-problema" class="hover:text-[#119e97] transition">El Problema</a>
+                <a href="#como-funciona" class="hover:text-[#119e97] transition">Cómo funciona</a>
+                <a href="#nosotros" class="hover:text-[#119e97] transition">Nosotros</a>
+                <a href="#contacto" class="hover:text-[#119e97] transition">Contacto</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section con Aurora Glow -->
+    <header id="main-content" tabindex="-1" class="relative min-h-screen flex items-center justify-center pt-20 overflow-hidden bg-[#08111c]">
+        <!-- Fondo animado (decorativo) -->
+        <div class="aurora-container" aria-hidden="true">
+            <div class="orb orb-1"></div><div class="orb orb-2"></div><div class="orb orb-3"></div><div class="orb orb-4"></div>
+            <div class="noise-overlay"></div>
+        </div>
+
+        <!-- Contenido Central -->
+        <div class="container mx-auto px-6 relative z-10 text-center max-w-4xl flex flex-col items-center">
+            <div class="anim-reveal flex items-center gap-2 mb-8 glass-panel px-4 py-2 rounded-full">
+                <div class="w-5 h-5 rounded-full border border-[#119e97] flex items-center justify-center bg-[#119e97]/20 overflow-hidden">
+                    <img
+                        src="favicon_evalora.png"
+                        alt=""
+                        width="20"
+                        height="20"
+                        loading="lazy"
+                        decoding="async"
+                        class="w-full h-full object-cover"
+                        onerror="handleLogoError(this, 'check')"
+                    >
+                </div>
+                <span class="text-white text-xs font-semibold tracking-[0.2em] uppercase drop-shadow-md">Evaluación de talento senior sin sesgo</span>
+            </div>
+
+            <h1 class="anim-reveal text-5xl md:text-7xl lg:text-8xl font-serif text-white font-bold leading-[1.1] mb-8 drop-shadow-2xl">
+                Tu experiencia se <span class="text-transparent bg-clip-text bg-gradient-to-r from-[#20c997] to-[#e0fbfc] italic">demuestra</span>,<br>no se declara en un currículum.
+            </h1>
+
+            <p class="anim-reveal text-lg md:text-xl text-gray-100 mb-12 max-w-2xl leading-relaxed font-light drop-shadow-md">
+                Conectamos empresas con profesionales de 60 a 65 años y más, a través de microproyectos remunerados que demuestran capacidad real y vigente.
+            </p>
+
+            <div class="anim-reveal flex flex-col sm:flex-row gap-5">
+                <button type="button" class="bg-[#119e97] hover:bg-[#0e857e] text-white px-8 py-4 rounded-full font-semibold transition duration-300 shadow-[0_0_25px_rgba(17,158,151,0.6)] hover:shadow-[0_0_35px_rgba(17,158,151,0.8)] transform hover:-translate-y-1">Soy una empresa</button>
+                <button type="button" class="glass-panel hover:bg-white/20 border border-white/40 text-white px-8 py-4 rounded-full font-semibold transition duration-300 transform hover:-translate-y-1 shadow-[0_0_15px_rgba(255,255,255,0.1)]">Quiero postular</button>
+            </div>
+        </div>
+
+        <!-- Onda Vectorial (Separador, decorativa) -->
+        <div class="absolute bottom-0 left-0 w-full overflow-hidden leading-[0] z-10 pointer-events-none" aria-hidden="true">
+            <svg class="wave-bg absolute bottom-0 w-full h-[100px] md:h-[150px] opacity-30" viewBox="0 0 1200 120" preserveAspectRatio="none"><path d="M0,0V46.29c47.79,22.2,103.59,32.17,158,28,70.36-5.37,136.33-33.31,206.8-37.5C438.64,32.43,512.34,53.67,583,72.05c69.27,18,138.3,24.88,209.4,13.08,36.15-6,69.85-17.84,104.45-29.34C989.49,25,1113-14.29,1200,52.47V120H0Z" fill="#119e97"></path></svg>
+            <svg class="wave-front relative block w-full h-[80px] md:h-[120px]" viewBox="0 0 1200 120" preserveAspectRatio="none"><path d="M321.39,56.44c58-10.79,114.16-30.13,172-41.86,82.39-16.72,168.19-17.73,250.45-.39C823.78,31,906.67,72,985.66,92.83c70.05,18.48,146.53,26.09,214.34,3V120H0V95.8C59.71,118.08,130.83,121.22,200.2,109.13Z" fill="#ffffff"></path></svg>
+        </div>
+    </header>
+
+    <!-- Barra de métricas -->
+    <div class="bg-white border-b border-gray-100 py-16 relative z-20">
+        <div class="container mx-auto px-6 max-w-5xl grid grid-cols-1 md:grid-cols-3 gap-12 text-center divide-y md:divide-y-0 md:divide-x divide-gray-200">
+            <div class="fade-up pt-6 md:pt-0">
+                <h2 class="text-3xl font-serif text-[#119e97] font-bold mb-2">+60</h2>
+                <p class="text-[10px] text-gray-500 uppercase tracking-[0.2em] font-medium">Años, el foco de la comunidad</p>
+            </div>
+            <div class="fade-up pt-6 md:pt-0">
+                <h2 class="text-3xl font-serif text-[#119e97] font-bold mb-2">100%</h2>
+                <p class="text-[10px] text-gray-500 uppercase tracking-[0.2em] font-medium">Desempeño real evaluado</p>
+            </div>
+            <div class="fade-up pt-6 md:pt-0">
+                <h2 class="text-3xl font-serif text-[#119e97] font-bold mb-2">SpA</h2>
+                <p class="text-[10px] text-gray-500 uppercase tracking-[0.2em] font-medium">Constituida legalmente en Chile</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- SECCIÓN: El Problema -->
+    <section id="el-problema" class="py-32 bg-gray-50">
+        <div class="container mx-auto px-6 max-w-5xl">
+            <div class="grid md:grid-cols-2 gap-20 items-center">
+                <div class="fade-left space-y-8">
+                    <span class="text-[#119e97] text-xs font-bold tracking-[0.2em] uppercase block">— El Problema</span>
+                    <h2 class="text-3xl md:text-4xl font-serif font-bold text-[#0d1b2a] leading-tight">El currículum no siempre cuenta toda la historia.</h2>
+                    <div class="space-y-5 text-gray-600 font-light text-[15px] leading-relaxed">
+                        <p>En Chile, miles de personas de 60 a 65 años enfrentan barreras reales para acceder a nuevas oportunidades laborales, no por falta de capacidad, sino por prejuicios asociados a la edad.</p>
+                        <p>Evalora nace para cambiar esa lógica: en lugar de decidir según años de experiencia o un papel, las empresas observan cómo cada candidato resuelve una tarea real del cargo al que postula.</p>
+                    </div>
+                    <blockquote class="border-l-2 border-[#119e97] pl-6 italic text-lg text-gray-800 font-serif">
+                        "Quiero que me evalúen por lo que puedo hacer hoy, no por la fecha de nacimiento en mi cédula de identidad."
+                    </blockquote>
+                </div>
+                <!-- Caja de Imagen (placeholder) -->
+                <div class="fade-right relative h-[550px] rounded-2xl bg-white shadow-xl overflow-hidden border border-gray-100 group">
+                    <div class="absolute inset-0 bg-gray-50 flex items-center justify-center">
+                        <div class="text-center text-gray-400 border border-dashed border-gray-300 rounded-xl p-8 w-[90%] h-[90%] flex flex-col justify-center items-center" role="img" aria-label="Espacio reservado para imagen referencial de un profesional senior trabajando">
+                            <svg class="w-8 h-8 mb-4 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                            <span class="font-medium text-sm">Imagen Referencial</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECCIÓN: Cuatro pasos -->
+    <section id="como-funciona" class="py-32 bg-white">
+        <div class="fade-up container mx-auto px-6 max-w-5xl text-center mb-24">
+            <span class="text-[#119e97] text-xs font-bold tracking-[0.2em] uppercase mb-4 block">— El recorrido en Evalora</span>
+            <h2 class="text-3xl md:text-4xl font-serif font-bold text-[#0d1b2a] leading-tight max-w-2xl mx-auto">
+                Cuatro pasos, evidencia real de principio a fin.
+            </h2>
+        </div>
+        <div class="container mx-auto px-6 max-w-6xl">
+            <div class="grid md:grid-cols-4 gap-6">
+                <div class="fade-up bg-gray-50 rounded-xl p-8 border border-transparent hover:border-gray-100 hover:bg-white hover:shadow-xl transition-all duration-300">
+                    <span class="text-gray-300 font-serif italic text-3xl block mb-6" aria-hidden="true">01</span>
+                    <h3 class="text-lg font-bold text-[#0d1b2a] mb-3">Publica el proyecto</h3>
+                    <p class="text-gray-500 text-sm font-light leading-relaxed">La empresa define una tarea real y remunerada del cargo a cubrir.</p>
+                </div>
+                <div class="fade-up bg-gray-50 rounded-xl p-8 border border-transparent hover:border-gray-100 hover:bg-white hover:shadow-xl transition-all duration-300">
+                    <span class="text-gray-300 font-serif italic text-3xl block mb-6" aria-hidden="true">02</span>
+                    <h3 class="text-lg font-bold text-[#0d1b2a] mb-3">Desarrollo</h3>
+                    <p class="text-gray-500 text-sm font-light leading-relaxed">El candidato postula trabajando en el microproyecto, demostrando su ejecución.</p>
+                </div>
+                <div class="fade-up bg-gray-50 rounded-xl p-8 border border-transparent hover:border-gray-100 hover:bg-white hover:shadow-xl transition-all duration-300">
+                    <span class="text-gray-300 font-serif italic text-3xl block mb-6" aria-hidden="true">03</span>
+                    <h3 class="text-lg font-bold text-[#0d1b2a] mb-3">Evaluación</h3>
+                    <p class="text-gray-500 text-sm font-light leading-relaxed">Entregamos una evaluación objetiva basada exclusivamente en los resultados.</p>
+                </div>
+                <div class="fade-up bg-gray-50 rounded-xl p-8 border border-transparent hover:border-gray-100 hover:bg-white hover:shadow-xl transition-all duration-300">
+                    <span class="text-gray-300 font-serif italic text-3xl block mb-6" aria-hidden="true">04</span>
+                    <h3 class="text-lg font-bold text-[#0d1b2a] mb-3">Contratación</h3>
+                    <p class="text-gray-500 text-sm font-light leading-relaxed">La empresa toma la decisión final con evidencia de desempeño real.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECCIÓN: Para Empresas / Postulantes -->
+    <section class="py-32 bg-gray-50">
+        <div class="container mx-auto px-6 max-w-6xl">
+            <div class="grid md:grid-cols-2 gap-10">
+                <div class="fade-left bg-[#0d1b2a] text-white rounded-2xl p-12 md:p-16 shadow-2xl relative overflow-hidden group">
+                    <div class="absolute top-0 right-0 w-64 h-64 bg-[#119e97]/10 rounded-full blur-3xl" aria-hidden="true"></div>
+                    <span class="text-[#119e97] text-[10px] font-bold tracking-[0.2em] uppercase mb-6 block">Para Empresas</span>
+                    <h3 class="text-2xl md:text-3xl font-serif font-bold mb-10 leading-snug">Contrata con evidencia, no con suposiciones.</h3>
+                    <ul class="space-y-5 mb-12 text-gray-300 font-light text-sm">
+                        <li class="flex items-start"><svg class="check-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>Reduce el riesgo de una mala contratación.</li>
+                        <li class="flex items-start"><svg class="check-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>Accede a talento senior (60-65 años) con experiencia real.</li>
+                        <li class="flex items-start"><svg class="check-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>Disminuye el sesgo etario en la selección.</li>
+                    </ul>
+                </div>
+                <div class="fade-right bg-white text-[#0d1b2a] rounded-2xl p-12 md:p-16 shadow-lg border border-gray-100 relative group">
+                    <span class="text-[#119e97] text-[10px] font-bold tracking-[0.2em] uppercase mb-6 block">Para Postulantes</span>
+                    <h3 class="text-2xl md:text-3xl font-serif font-bold mb-10 leading-snug">Demuestra lo que sabes hacer, hoy.</h3>
+                    <ul class="space-y-5 mb-12 text-gray-500 font-light text-sm">
+                        <li class="flex items-start"><svg class="check-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>Postula sin que tu edad sea el primer filtro.</li>
+                        <li class="flex items-start"><svg class="check-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>Recibe un pago por cada microproyecto que desarrolles.</li>
+                        <li class="flex items-start"><svg class="check-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>Accede a oportunidades laborales reales sin prejuicios.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECCIÓN: Misión y Visión -->
+    <section id="nosotros" class="py-32 bg-[#08111c] relative overflow-hidden">
+        <div class="container mx-auto px-6 max-w-5xl relative z-10">
+            <div class="grid md:grid-cols-2 gap-20 divide-y md:divide-y-0 md:divide-x divide-white/10">
+                <div class="fade-left md:pr-16">
+                    <span class="text-[#119e97] text-[10px] font-bold tracking-[0.2em] uppercase mb-6 block">— Misión</span>
+                    <h3 class="text-2xl md:text-3xl font-serif font-bold text-white leading-snug mb-6">Conectar empresas con talento a través de una evaluación justa.</h3>
+                    <p class="text-gray-400 font-light text-sm leading-relaxed">Buscamos reducir los sesgos asociados a la edad y generar oportunidades laborales donde las competencias y el potencial de cada persona sean el principal criterio de contratación.</p>
+                </div>
+                <div class="fade-right md:pl-16 pt-12 md:pt-0">
+                    <span class="text-[#119e97] text-[10px] font-bold tracking-[0.2em] uppercase mb-6 block">— Visión</span>
+                    <h3 class="text-2xl md:text-3xl font-serif font-bold text-white leading-snug mb-6">Ser la plataforma líder en Chile en evaluación de talento.</h3>
+                    <p class="text-gray-400 font-light text-sm leading-relaxed">Aspiramos a construir un mercado laboral más inclusivo, donde todas las personas, sin importar su edad, tengan la oportunidad de demostrar su capacidad y acceder a empleos de calidad.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECCIÓN: Valores Institucionales -->
+    <section class="py-32 bg-white border-b border-gray-100">
+        <div class="fade-up container mx-auto px-6 max-w-5xl text-center mb-20">
+            <span class="text-[#119e97] text-xs font-bold tracking-[0.2em] uppercase mb-4 block">— Lo que nos guía</span>
+            <h2 class="text-3xl md:text-4xl font-serif font-bold text-[#0d1b2a] leading-tight">Nuestros valores institucionales</h2>
+        </div>
+        <div class="container mx-auto px-6 max-w-6xl">
+            <div class="grid md:grid-cols-4 gap-6">
+                <div class="fade-up bg-white rounded-xl p-8 border border-gray-100 shadow-sm hover:shadow-md transition-all">
+                    <h3 class="text-base font-bold text-[#0d1b2a] mb-3">Inclusión</h3>
+                    <p class="text-gray-600 font-light text-xs leading-relaxed">Ninguna postulación se descarta por fecha de nacimiento.</p>
+                </div>
+                <div class="fade-up bg-white rounded-xl p-8 border border-gray-100 shadow-sm hover:shadow-md transition-all">
+                    <h3 class="text-base font-bold text-[#0d1b2a] mb-3">Transparencia</h3>
+                    <p class="text-gray-600 font-light text-xs leading-relaxed">Criterios de evaluación visibles antes de postular.</p>
+                </div>
+                <div class="fade-up bg-white rounded-xl p-8 border border-gray-100 shadow-sm hover:shadow-md transition-all">
+                    <h3 class="text-base font-bold text-[#0d1b2a] mb-3">Evidencia</h3>
+                    <p class="text-gray-600 font-light text-xs leading-relaxed">Decisiones basadas en resultados concretos y revisables.</p>
+                </div>
+                <div class="fade-up bg-white rounded-xl p-8 border border-gray-100 shadow-sm hover:shadow-md transition-all">
+                    <h3 class="text-base font-bold text-[#0d1b2a] mb-3">Innovación</h3>
+                    <p class="text-gray-600 font-light text-xs leading-relaxed">Reemplazamos tests genéricos por tareas reales.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECCIÓN: Sobre Evalora (Cobertura Nacional) -->
+    <section class="py-32 bg-white">
+        <div class="container mx-auto px-6 max-w-5xl">
+            <div class="grid md:grid-cols-2 gap-20 items-center">
+                <!-- Textos -->
+                <div class="space-y-6">
+                    <span class="text-[#119e97] text-[10px] font-bold tracking-[0.2em] uppercase block">— Sobre Evalora</span>
+                    <h2 class="text-3xl md:text-4xl font-serif font-bold text-[#0d1b2a] leading-tight">Una empresa chilena, con cobertura nacional.</h2>
+                    <p class="text-gray-500 font-light text-sm leading-relaxed mb-8">
+                        Evalora SpA opera principalmente en línea, mediante una plataforma web accesible desde cualquier lugar de Chile. Nuestra oficina administrativa coordina el soporte a usuarios y la gestión comercial.
+                    </p>
+
+                    <div class="space-y-4 pt-4 border-t border-gray-100">
+                        <div class="flex items-start gap-4">
+                            <span class="text-[#0d1b2a] font-bold text-xs uppercase tracking-wider w-24">Razón social:</span>
+                            <span class="text-gray-600 text-sm font-light">Evalora SpA</span>
+                        </div>
+                        <div class="flex items-start gap-4">
+                            <span class="text-[#0d1b2a] font-bold text-xs uppercase tracking-wider w-24">Modelo:</span>
+                            <span class="text-gray-600 text-sm font-light">Principalmente online, con actividades presenciales puntuales</span>
+                        </div>
+                        <div class="flex items-start gap-4">
+                            <span class="text-[#0d1b2a] font-bold text-xs uppercase tracking-wider w-24">Cobertura:</span>
+                            <span class="text-gray-600 text-sm font-light">Todo Chile</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tarjeta de Ubicación -->
+                <div class="fade-up relative">
+                    <div class="h-48 rounded-t-2xl bg-gray-50 flex items-center justify-center border border-gray-200 border-b-0" role="img" aria-label="Espacio reservado para imagen referencial de la oficina">
+                         <span class="text-gray-400 text-xs font-medium flex items-center gap-2">
+                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                             Imagen Referencial
+                         </span>
+                    </div>
+
+                    <div class="bg-[#0d1b2a] rounded-2xl rounded-tr-none p-10 shadow-2xl relative overflow-hidden transform -translate-y-6 -ml-6 mr-6">
+                        <div class="absolute top-0 right-0 w-32 h-32 bg-[#119e97]/20 rounded-full blur-2xl" aria-hidden="true"></div>
+                        <div class="w-10 h-10 rounded-full bg-[#119e97]/10 flex items-center justify-center mb-6 text-[#119e97]">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                        </div>
+                        <span class="text-[#119e97] text-[10px] font-bold tracking-[0.2em] uppercase mb-2 block">— Oficina Central</span>
+                        <h3 class="text-white font-serif text-2xl font-bold mb-1">Las Condes, Santiago</h3>
+                        <p class="text-gray-400 text-xs font-light">Región Metropolitana, Chile</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECCIÓN: Contacto -->
+    <section id="contacto" class="py-32 bg-[#08111c] relative overflow-hidden">
+        <div class="absolute bottom-0 left-0 w-full h-full opacity-10 pointer-events-none" aria-hidden="true">
+            <svg class="absolute -left-64 -bottom-64 w-[800px] h-[800px] text-[#119e97]" fill="currentColor" viewBox="0 0 100 100"><circle cx="50" cy="50" r="50"/></svg>
+        </div>
+
+        <div class="container mx-auto px-6 max-w-5xl relative z-10">
+            <div class="grid md:grid-cols-2 gap-20">
+
+                <div class="fade-up space-y-8 pr-0 md:pr-10">
+                    <div>
+                        <span class="text-[#119e97] text-[10px] font-bold tracking-[0.2em] uppercase mb-6 block">— Conversemos</span>
+                        <h2 class="text-3xl md:text-5xl font-serif font-bold text-white leading-tight mb-6">¿Empresa o postulante?<br>Escríbenos.</h2>
+                        <p class="text-gray-400 font-light text-sm leading-relaxed mb-12">Cuéntanos qué necesitas y te contactamos a la brevedad. También puedes escribirnos directamente por estos medios.</p>
+                    </div>
+
+                    <div class="space-y-6">
+                        <div class="flex items-center gap-4">
+                            <div class="w-10 h-10 rounded-full glass-panel flex items-center justify-center text-[#119e97]">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
+                            </div>
+                            <div>
+                                <span class="text-gray-500 text-[10px] uppercase tracking-wider block font-bold">Correo</span>
+                                <span class="text-gray-200 text-sm font-light">contacto@evalora.cl</span>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-4">
+                            <div class="w-10 h-10 rounded-full glass-panel flex items-center justify-center text-[#119e97]">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"></path></svg>
+                            </div>
+                            <div>
+                                <span class="text-gray-500 text-[10px] uppercase tracking-wider block font-bold">Teléfono</span>
+                                <span class="text-gray-200 text-sm font-light">+56 9 8123 4567</span>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-4">
+                            <div class="w-10 h-10 rounded-full glass-panel flex items-center justify-center text-[#119e97]">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                            </div>
+                            <div>
+                                <span class="text-gray-500 text-[10px] uppercase tracking-wider block font-bold">Oficina</span>
+                                <span class="text-gray-200 text-sm font-light">Av. Apoquindo, Las Condes, Santiago</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="fade-up">
+                    <form class="glass-panel rounded-2xl p-8 md:p-10 shadow-2xl">
+                        <div class="grid grid-cols-2 gap-6 mb-6">
+                            <div>
+                                <label for="contact-name" class="text-gray-400 text-xs font-medium mb-2 block">Nombre</label>
+                                <input type="text" id="contact-name" name="name" autocomplete="name" required placeholder="Tu nombre" class="w-full bg-[#0d1b2a]/50 border border-white/10 rounded-lg p-3 text-sm text-white placeholder-gray-600 focus:outline-none focus:border-[#119e97] transition">
+                            </div>
+                            <div>
+                                <label for="contact-email" class="text-gray-400 text-xs font-medium mb-2 block">Correo</label>
+                                <input type="email" id="contact-email" name="email" autocomplete="email" required placeholder="tu@correo.cl" class="w-full bg-[#0d1b2a]/50 border border-white/10 rounded-lg p-3 text-sm text-white placeholder-gray-600 focus:outline-none focus:border-[#119e97] transition">
+                            </div>
+                        </div>
+                        <div class="mb-6">
+                            <label for="contact-role" class="text-gray-400 text-xs font-medium mb-2 block">Escribes como</label>
+                            <select id="contact-role" name="role" required class="w-full bg-[#0d1b2a]/50 border border-white/10 rounded-lg p-3 text-sm text-gray-300 focus:outline-none focus:border-[#119e97] transition appearance-none">
+                                <option value="" disabled selected>Selecciona una opción</option>
+                                <option value="empresa">Empresa buscando talento</option>
+                                <option value="postulante">Postulante / Talento</option>
+                                <option value="otro">Otro motivo</option>
+                            </select>
+                        </div>
+                        <div class="mb-8">
+                            <label for="contact-message" class="text-gray-400 text-xs font-medium mb-2 block">Mensaje</label>
+                            <textarea id="contact-message" name="message" required placeholder="Cuéntanos brevemente qué necesitas..." rows="4" class="w-full bg-[#0d1b2a]/50 border border-white/10 rounded-lg p-3 text-sm text-white placeholder-gray-600 focus:outline-none focus:border-[#119e97] transition resize-none"></textarea>
+                        </div>
+                        <button type="button" class="w-full bg-[#119e97] hover:bg-[#0e857e] text-white font-semibold py-4 rounded-lg transition duration-300 shadow-[0_0_15px_rgba(17,158,151,0.3)]">
+                            Enviar mensaje
+                        </button>
+                        <p class="text-center text-[10px] text-gray-500 mt-4 font-light">Este sitio es un prototipo académico; el formulario no envía datos reales.</p>
+                    </form>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-[#050a12] border-t border-white/5 py-8">
+        <div class="container mx-auto px-6 max-w-5xl text-center flex flex-col md:flex-row justify-between items-center gap-4">
+            <div class="text-lg font-bold text-white tracking-tight flex items-center gap-2">
+                <div class="w-6 h-6 rounded-full border border-[#119e97] flex items-center justify-center text-[#119e97] text-xs" aria-hidden="true">e</div>
+                evalora
+            </div>
+            <p class="text-gray-500 text-xs font-light">&copy; 2026 Evalora SpA. Todos los derechos reservados.</p>
+            <div class="flex gap-4 text-gray-500">
+                <a href="#" class="hover:text-[#119e97] transition" aria-label="Evalora en Twitter"><svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M24 4.557c-.883.392-1.832.656-2.828.775 1.017-.609 1.798-1.574 2.165-2.724-.951.564-2.005.974-3.127 1.195-.897-.957-2.178-1.555-3.594-1.555-3.179 0-5.515 2.966-4.797 6.045-4.091-.205-7.719-2.165-10.148-5.144-1.29 2.213-.669 5.108 1.523 6.574-.806-.026-1.566-.247-2.229-.616-.054 2.281 1.581 4.415 3.949 4.89-.693.188-1.452.232-2.224.084.626 1.956 2.444 3.379 4.6 3.419-2.07 1.623-4.678 2.348-7.29 2.04 2.179 1.397 4.768 2.212 7.548 2.212 9.142 0 14.307-7.721 13.995-14.646.962-.695 1.797-1.562 2.457-2.549z"/></svg></a>
+                <a href="#" class="hover:text-[#119e97] transition" aria-label="Evalora en LinkedIn"><svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg></a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- GSAP se carga al final del body para no bloquear el renderizado inicial de la página -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+
+    <!-- Script de Animaciones -->
+    <script>
+        gsap.registerPlugin(ScrollTrigger);
+        ScrollTrigger.config({ ignoreMobileResize: true }); // evita recálculos al mostrar/ocultar la barra de URL en móviles
+
+        var prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+        if (prefersReducedMotion) {
+            // El usuario prefiere menos movimiento: mostramos el contenido de inmediato, sin animar
+            gsap.set(".anim-reveal, .fade-up, .fade-left, .fade-right", { x: 0, y: 0, opacity: 1 });
+        } else {
+            // Animación Hero
+            gsap.to(".anim-reveal", { y: 0, opacity: 1, duration: 1.2, stagger: 0.2, ease: "power3.out", delay: 0.2, force3D: true });
+            gsap.to(".wave-front", { y: 40, force3D: true, scrollTrigger: { trigger: "header", start: "top top", end: "bottom top", scrub: 1 } });
+            gsap.to(".wave-bg", { y: 80, force3D: true, scrollTrigger: { trigger: "header", start: "top top", end: "bottom top", scrub: 1 } });
+
+            // Aparición al hacer scroll, agrupada con ScrollTrigger.batch para que todas las secciones se despliegen con el mismo ritmo
+            gsap.set(".fade-up, .fade-left, .fade-right", { willChange: "transform, opacity" });
+            ScrollTrigger.batch(".fade-up", {
+                start: "top 90%",
+                onEnter: function (batch) {
+                    gsap.to(batch, {
+                        y: 0, opacity: 1, duration: 0.6, ease: "power2.out", stagger: 0.08, overwrite: true,
+                        onComplete: function () { batch.forEach(function (el) { el.style.willChange = "auto"; }); }
+                    });
+                },
+                onLeaveBack: function (batch) {
+                    gsap.to(batch, { y: 24, opacity: 0, duration: 0.2, overwrite: true });
+                }
+            });
+
+            // Tarjetas "Para Empresas" / "Para Postulantes": entrada lateral más marcada, sincronizada entre ambas
+            ScrollTrigger.batch(".fade-left, .fade-right", {
+                start: "top 88%",
+                onEnter: function (batch) {
+                    gsap.to(batch, {
+                        x: 0, opacity: 1, duration: 0.7, ease: "power2.out", stagger: 0.12, overwrite: true,
+                        onComplete: function () { batch.forEach(function (el) { el.style.willChange = "auto"; }); }
+                    });
+                },
+                onLeaveBack: function (batch) {
+                    gsap.to(batch, { x: function (i, el) { return el.classList.contains("fade-left") ? -50 : 50; }, opacity: 0, duration: 0.2, overwrite: true });
+                }
+            });
+        }
+    </script>
+</body>
+</html>
