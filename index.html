@@ -142,11 +142,46 @@
                 <a href="#nosotros" class="hover:text-[#119e97] transition">Nosotros</a>
                 <a href="#contacto" class="hover:text-[#119e97] transition">Contacto</a>
             </div>
+            <button type="button" id="mobile-menu-toggle" class="md:hidden text-[#0d1b2a] p-2 -mr-2" aria-label="Abrir menú" aria-expanded="false" aria-controls="mobile-menu">
+                <svg id="menu-icon-open" class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
+                <svg id="menu-icon-close" class="w-6 h-6 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+            </button>
+        </div>
+        <div id="mobile-menu" class="hidden md:hidden bg-white border-t border-gray-100 px-6 py-4 flex flex-col gap-4 text-sm font-medium uppercase tracking-wider text-gray-600">
+            <a href="#el-problema" class="hover:text-[#119e97] transition">El Problema</a>
+            <a href="#como-funciona" class="hover:text-[#119e97] transition">Cómo funciona</a>
+            <a href="#nosotros" class="hover:text-[#119e97] transition">Nosotros</a>
+            <a href="#contacto" class="hover:text-[#119e97] transition">Contacto</a>
         </div>
     </nav>
 
+    <script>
+        (function () {
+            var toggle = document.getElementById('mobile-menu-toggle');
+            var menu = document.getElementById('mobile-menu');
+            var iconOpen = document.getElementById('menu-icon-open');
+            var iconClose = document.getElementById('menu-icon-close');
+            if (!toggle || !menu) return;
+            toggle.addEventListener('click', function () {
+                var willOpen = menu.classList.contains('hidden');
+                menu.classList.toggle('hidden', !willOpen);
+                toggle.setAttribute('aria-expanded', willOpen ? 'true' : 'false');
+                iconOpen.classList.toggle('hidden', willOpen);
+                iconClose.classList.toggle('hidden', !willOpen);
+            });
+            menu.querySelectorAll('a').forEach(function (link) {
+                link.addEventListener('click', function () {
+                    menu.classList.add('hidden');
+                    toggle.setAttribute('aria-expanded', 'false');
+                    iconOpen.classList.remove('hidden');
+                    iconClose.classList.add('hidden');
+                });
+            });
+        })();
+    </script>
+
     <!-- Hero Section con Aurora Glow -->
-    <header id="main-content" tabindex="-1" class="relative min-h-screen flex items-center justify-center pt-20 overflow-hidden bg-[#08111c]">
+    <header id="main-content" tabindex="-1" class="relative min-h-screen flex items-center justify-center pt-20 pb-32 md:pb-0 overflow-hidden bg-[#08111c]">
         <!-- Fondo animado (decorativo) -->
         <div class="aurora-container" aria-hidden="true">
             <div class="orb orb-1"></div><div class="orb orb-2"></div><div class="orb orb-3"></div><div class="orb orb-4"></div>
@@ -186,7 +221,7 @@
         </div>
 
         <!-- Onda Vectorial (Separador, decorativa) -->
-        <div class="absolute bottom-0 left-0 w-full overflow-hidden leading-[0] z-10 pointer-events-none" aria-hidden="true">
+        <div class="absolute bottom-0 left-0 w-full overflow-hidden leading-[0] z-0 pointer-events-none" aria-hidden="true">
             <svg class="wave-bg absolute bottom-0 w-full h-[100px] md:h-[150px] opacity-30" viewBox="0 0 1200 120" preserveAspectRatio="none"><path d="M0,0V46.29c47.79,22.2,103.59,32.17,158,28,70.36-5.37,136.33-33.31,206.8-37.5C438.64,32.43,512.34,53.67,583,72.05c69.27,18,138.3,24.88,209.4,13.08,36.15-6,69.85-17.84,104.45-29.34C989.49,25,1113-14.29,1200,52.47V120H0Z" fill="#119e97"></path></svg>
             <svg class="wave-front relative block w-full h-[80px] md:h-[120px]" viewBox="0 0 1200 120" preserveAspectRatio="none"><path d="M321.39,56.44c58-10.79,114.16-30.13,172-41.86,82.39-16.72,168.19-17.73,250.45-.39C823.78,31,906.67,72,985.66,92.83c70.05,18.48,146.53,26.09,214.34,3V120H0V95.8C59.71,118.08,130.83,121.22,200.2,109.13Z" fill="#ffffff"></path></svg>
         </div>
