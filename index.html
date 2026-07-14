@@ -104,7 +104,11 @@
             html { scroll-behavior: auto; }
         }
 
-        .glass-panel { background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.1); }
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.1);
+            /* Fuerza a Chrome a recortar el blur según el border-radius del elemento (bug conocido: si no, el blur se asoma en forma cuadrada por las esquinas) */
+            -webkit-mask-image: -webkit-radial-gradient(white, black); mask-image: radial-gradient(white, black);
+        }
         .check-icon { flex-shrink: 0; width: 1.2rem; height: 1.2rem; color: #119e97; margin-top: 0.2rem; margin-right: 0.75rem; }
     </style>
 
